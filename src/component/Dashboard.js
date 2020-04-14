@@ -1,9 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
-import TopSideBar from './TopSideBar';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
+import TopSideBar from './TopSideBar';
+import LeaveCalendar from './LeaveCalendar';
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -24,7 +25,7 @@ const Dashboard = props => {
     <div>
       <TopSideBar />
       <div className={clsx(classes.content, isDesktop && classes.shiftContent)}>
-        'This is Admin Page'
+        <LeaveCalendar />
       </div>
     </div>
   )
