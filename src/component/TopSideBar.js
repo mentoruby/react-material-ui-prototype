@@ -130,7 +130,7 @@ const TopSideBar = props => {
       icon: <DashboardIcon />
     },
     {
-      title: 'Leaves',
+      title: 'My Leaves',
       href: '/leaves',
       icon: <LocalFloristIcon />
     },

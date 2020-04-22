@@ -62,6 +62,41 @@ const leaveSettings = {
   },
 };
 
+const createLeaveInfo = (prop) => {
+  return {
+    ...prop,
+    get fraction() {
+      var str = '';
+      if(this.used>=0) {
+        str += this.used;
+      }
+      if(this.total>0) {
+        str += '/' + this.total;
+      }
+      return str;
+    }
+  }
+}
+
+const leaveInfoList = {
+  'AL':createLeaveInfo({
+    used:6,
+    total:16
+  }),
+  'SL':createLeaveInfo({
+    used:5,
+    total:-1
+  }),
+  'CL':createLeaveInfo({
+    used:-1,
+    total:-1
+  }),
+  'BL':createLeaveInfo({
+    used:0,
+    total:1
+  }),
+};
+
 const createEvent = (prop) => {
   return {
     ...prop,
@@ -170,6 +205,7 @@ class LeaveCalendar extends Component {
     super(props);
     this.state = {
       events:[],
+      leaveInfoList:{},
     }
     this.refreshCalendar = this.refreshCalendar.bind(this);
     this.localizer = momentLocalizer(moment);
@@ -211,6 +247,7 @@ class LeaveCalendar extends Component {
                 <div className={classes.leaveTypeEach}>
                   <Avatar className={classes.avatar} style={{ backgroundColor:leaveSettings[key].leaveColor }}>{key}</Avatar>
                   <Typography variant="caption">{leaveSettings[key].leaveName}</Typography>
+                  <Typography variant="caption">{leaveInfoList[key]? leaveInfoList[key].fraction:""}</Typography>
                 </div>
               );
             })}
