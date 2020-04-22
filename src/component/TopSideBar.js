@@ -22,6 +22,7 @@ import Hidden from '@material-ui/core/Hidden';
 import InputIcon from '@material-ui/icons/Input';
 import Avatar from '@material-ui/core/Avatar';
 import PersonOutlinedIcon from '@material-ui/icons/PersonOutlined';
+import History from './History';
 
 const drawerWidth = 240;
 const topBarHeight = 81;
@@ -131,7 +132,7 @@ const TopSideBar = props => {
     },
     {
       title: 'My Leaves',
-      href: '/leaves',
+      href: '/myleave',
       icon: <LocalFloristIcon />
     },
     {
@@ -204,8 +205,9 @@ const TopSideBar = props => {
                     activeClassName={classes.menuactive}
                     className={classes.menubutton}
                     //component={CustomRouterLink}
-                    to={item.href}>
-                    <div className={classes.menuicon}>{item.icon}</div>
+                    // to={item.href}
+                    onClick={() => {History.push(item.href);}}>
+                  <div className={classes.menuicon}>{item.icon}</div>
                     {item.title}
                   </Button>
                 </ListItem>

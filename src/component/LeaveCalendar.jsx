@@ -6,6 +6,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
+import LeaveUtil from '../util/LeaveUtil';
+import EventUtil from '../util/EventUtil';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -39,126 +41,71 @@ const useStyles = theme => ({
 const currYear = new Date().getFullYear();
 const currMonth = 3; //new Date().getMonth();
 
-const leaveSettings = {
-  'AL':{
-    leaveName:'Annual Leave',
-    leaveColor:'#3f51b5'
-  },
-  'SL':{
-    leaveName:'Sick Leave',
-    leaveColor:'#27b0a0'
-  },
-  'CL':{
-    leaveName:'Compensation Leave',
-    leaveColor:'#f49b21'
-  },
-  'BL':{
-    leaveName:'Birthday Leave',
-    leaveColor:'#4a974e'
-  },
-  'FH':{
-    leaveName:'Holiday',
-    leaveColor:'#e44a44'
-  },
-};
-
-const createLeaveInfo = (prop) => {
-  return {
-    ...prop,
-    get fraction() {
-      var str = '';
-      if(this.used>=0) {
-        str += this.used;
-      }
-      if(this.total>0) {
-        str += '/' + this.total;
-      }
-      return str;
-    }
-  }
-}
-
-const createEvent = (prop) => {
-  return {
-    ...prop,
-    get title() {
-      if(this.leaveType === 'FH') {
-        return this.name;
-      } else {
-        return this.name + ' ' + this.id + ' [' + this.leaveType+']';
-      }
-    },
-    get bgColor() {
-      return leaveSettings[this.leaveType].leaveColor;
-    }
-  }
-}
-
 const eventList = [
-  createEvent({
+  EventUtil.CreateEvent({
     id: 0,
     name: 'All Day Event All Day Event All Day Event All Day Event',
     start: new Date(currYear, currMonth-1, 0),
     end: new Date(currYear, currMonth, 1),
     leaveType: 'AL'
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 1,
     name: 'Staff',
     start: new Date(currYear, currMonth, 7),
     end: new Date(currYear, currMonth, 8),
     leaveType: 'AL',
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 2,
     name: 'Staff',
     start: new Date(currYear, currMonth, 7),
     end: new Date(currYear, currMonth, 8),
     leaveType: 'SL',
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 3,
     name: 'Staff',
     start: new Date(currYear, currMonth, 7),
     end: new Date(currYear, currMonth, 8),
     leaveType: 'CL',
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 4,
     name: 'Staff',
     start: new Date(currYear, currMonth, 16),
     end: new Date(currYear, currMonth, 17),
     leaveType: 'SL',
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 5,
     name: 'Staff',
     start: new Date(currYear, currMonth, 22),
     end: new Date(currYear, currMonth, 23),
     leaveType: 'CL',
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 7,
     name: 'Staff',
     start: new Date(currYear, currMonth, 22),
     end: new Date(currYear, currMonth, 23),
     leaveType: 'BL',
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 99,
     name: 'Good Friday',
     start: new Date(currYear, currMonth, 10),
     end: new Date(currYear, currMonth, 11),
     leaveType: 'FH',
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 100,
     name: 'The Day Following Good Friday',
     start: new Date(currYear, currMonth, 11),
     end: new Date(currYear, currMonth, 12),
     leaveType: 'FH',
   }),
-  createEvent({
+  EventUtil.CreateEvent({
     id: 101,
     name: 'Easter Monday',
     start: new Date(currYear, currMonth, 13),
@@ -200,19 +147,19 @@ class LeaveCalendar extends Component {
     this.setState({
       events:eventList,
       leaveInfoList:{
-        'AL':createLeaveInfo({
+        'AL':LeaveUtil.CreateLeaveInfo({
           used:6,
           total:16
         }),
-        'SL':createLeaveInfo({
+        'SL':LeaveUtil.CreateLeaveInfo({
           used:5,
           total:-1
         }),
-        'CL':createLeaveInfo({
+        'CL':LeaveUtil.CreateLeaveInfo({
           used:-1,
           total:-1
         }),
-        'BL':createLeaveInfo({
+        'BL':LeaveUtil.CreateLeaveInfo({
           used:0,
           total:1
         }),
@@ -224,8 +171,8 @@ class LeaveCalendar extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.leaveTypeEach}>
-        <Avatar className={classes.avatar} style={{ backgroundColor:leaveSettings[key].leaveColor }} >{key}</Avatar>
-        <Typography variant="caption">{leaveSettings[key].leaveName}</Typography>
+        <Avatar className={classes.avatar} style={{ backgroundColor:LeaveUtil.LeaveSettings[key].leaveColor }} >{key}</Avatar>
+        <Typography variant="caption">{LeaveUtil.LeaveSettings[key].leaveName}</Typography>
         <Typography variant="caption">{this.state.leaveInfoList[key]? this.state.leaveInfoList[key].fraction:""}</Typography>
       </div>
     )
@@ -253,7 +200,7 @@ class LeaveCalendar extends Component {
             />
           </div>
           <div className={classes.leaveTypeArea}>
-            {Object.keys(leaveSettings).map(key => { return this.renderLeaveInfo(key); })}
+            {Object.keys(LeaveUtil.LeaveSettings).map(key => { return this.renderLeaveInfo(key); })}
           </div>
         </CardContent>
       </Card>
