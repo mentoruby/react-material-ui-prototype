@@ -78,25 +78,6 @@ const createLeaveInfo = (prop) => {
   }
 }
 
-const leaveInfoList = {
-  'AL':createLeaveInfo({
-    used:6,
-    total:16
-  }),
-  'SL':createLeaveInfo({
-    used:5,
-    total:-1
-  }),
-  'CL':createLeaveInfo({
-    used:-1,
-    total:-1
-  }),
-  'BL':createLeaveInfo({
-    used:0,
-    total:1
-  }),
-};
-
 const createEvent = (prop) => {
   return {
     ...prop,
@@ -218,11 +199,41 @@ class LeaveCalendar extends Component {
   refreshCalendar() {
     this.setState({
       events:eventList,
+      leaveInfoList:{
+        'AL':createLeaveInfo({
+          used:6,
+          total:16
+        }),
+        'SL':createLeaveInfo({
+          used:5,
+          total:-1
+        }),
+        'CL':createLeaveInfo({
+          used:-1,
+          total:-1
+        }),
+        'BL':createLeaveInfo({
+          used:0,
+          total:1
+        }),
+      },
     });
+  }
+
+  renderLeaveInfo(key) {
+    const { classes } = this.props;
+    return (
+      <div className={classes.leaveTypeEach}>
+        <Avatar className={classes.avatar} style={{ backgroundColor:leaveSettings[key].leaveColor }} >{key}</Avatar>
+        <Typography variant="caption">{leaveSettings[key].leaveName}</Typography>
+        <Typography variant="caption">{this.state.leaveInfoList[key]? this.state.leaveInfoList[key].fraction:""}</Typography>
+      </div>
+    )
   }
 
   render() {
     const { classes } = this.props;
+
     return (
       <Card className={classes.root}>
         <CardContent>
@@ -242,15 +253,7 @@ class LeaveCalendar extends Component {
             />
           </div>
           <div className={classes.leaveTypeArea}>
-            {Object.keys(leaveSettings).map(function (key) {
-              return (
-                <div className={classes.leaveTypeEach}>
-                  <Avatar className={classes.avatar} style={{ backgroundColor:leaveSettings[key].leaveColor }}>{key}</Avatar>
-                  <Typography variant="caption">{leaveSettings[key].leaveName}</Typography>
-                  <Typography variant="caption">{leaveInfoList[key]? leaveInfoList[key].fraction:""}</Typography>
-                </div>
-              );
-            })}
+            {Object.keys(leaveSettings).map(key => { return this.renderLeaveInfo(key); })}
           </div>
         </CardContent>
       </Card>
