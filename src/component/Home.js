@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
 import TopSideBar from './TopSideBar';
+import FooterBar from './Footer';
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -25,6 +26,7 @@ const Home = props => {
       <TopSideBar />
       <div className={clsx(classes.content, isDesktop && classes.shiftContent)}>
         {props.childComponent}
+        <FooterBar />
       </div>
     </div>
   )

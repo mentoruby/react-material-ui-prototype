@@ -9,7 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Container from '@material-ui/core/Container';
 import History from './History';
-import PublicTopBar from './PublicTopBar'
+import PublicTopBar from './PublicTopBar';
+import FooterBar from './Footer';
 
 const useStyles = theme => ({
   signin: {
@@ -51,8 +52,8 @@ class LoginPage extends Component {
 
   onSubmit(event) {
     // if(this.state.loginId==='admin') {
-    //History.push('/myleave');
-    History.push('/dashboard');
+    History.push('/myleave');
+    //History.push('/dashboard');
   }
 
   render() {
@@ -108,6 +109,7 @@ class LoginPage extends Component {
             </Grid>
           </div>
         </Container>
+        <FooterBar />
       </div>
     )
   }

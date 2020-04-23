@@ -41,93 +41,6 @@ const useStyles = theme => ({
 const currYear = new Date().getFullYear();
 const currMonth = 3; //new Date().getMonth();
 
-const eventList = [
-  EventUtil.CreateEvent({
-    id: 0,
-    name: 'All Day Event All Day Event All Day Event All Day Event',
-    start: new Date(currYear, currMonth-1, 0),
-    end: new Date(currYear, currMonth, 1),
-    leaveType: 'AL'
-  }),
-  EventUtil.CreateEvent({
-    id: 1,
-    name: 'Staff',
-    start: new Date(currYear, currMonth, 7),
-    end: new Date(currYear, currMonth, 8),
-    leaveType: 'AL',
-  }),
-  EventUtil.CreateEvent({
-    id: 2,
-    name: 'Staff',
-    start: new Date(currYear, currMonth, 7),
-    end: new Date(currYear, currMonth, 8),
-    leaveType: 'SL',
-  }),
-  EventUtil.CreateEvent({
-    id: 3,
-    name: 'Staff',
-    start: new Date(currYear, currMonth, 7),
-    end: new Date(currYear, currMonth, 8),
-    leaveType: 'CL',
-  }),
-  EventUtil.CreateEvent({
-    id: 4,
-    name: 'Staff',
-    start: new Date(currYear, currMonth, 16),
-    end: new Date(currYear, currMonth, 17),
-    leaveType: 'SL',
-  }),
-  EventUtil.CreateEvent({
-    id: 5,
-    name: 'Staff',
-    start: new Date(currYear, currMonth, 22),
-    end: new Date(currYear, currMonth, 23),
-    leaveType: 'CL',
-  }),
-  EventUtil.CreateEvent({
-    id: 7,
-    name: 'Staff',
-    start: new Date(currYear, currMonth, 22),
-    end: new Date(currYear, currMonth, 23),
-    leaveType: 'BL',
-  }),
-  EventUtil.CreateEvent({
-    id: 99,
-    name: 'Good Friday',
-    start: new Date(currYear, currMonth, 10),
-    end: new Date(currYear, currMonth, 11),
-    leaveType: 'FH',
-  }),
-  EventUtil.CreateEvent({
-    id: 100,
-    name: 'The Day Following Good Friday',
-    start: new Date(currYear, currMonth, 11),
-    end: new Date(currYear, currMonth, 12),
-    leaveType: 'FH',
-  }),
-  EventUtil.CreateEvent({
-    id: 101,
-    name: 'Easter Monday',
-    start: new Date(currYear, currMonth, 13),
-    end: new Date(currYear, currMonth, 14),
-    leaveType: 'FH',
-  }),
-];
-
-const holdiayPropPropGetter = date => {
-  var isHoliday = false;
-  eventList.forEach(function(event) {
-    if(event.leaveType==='FH' && event.start <= date && event.end > date) {
-      isHoliday = true;
-    }
-  });
-  if(isHoliday) {
-    return {style: {backgroundColor : '#f2a7a7'}}
-  } else {
-    return {}
-  }
-}
-
 class LeaveCalendar extends Component {
   constructor(props) {
     super(props);
@@ -136,6 +49,8 @@ class LeaveCalendar extends Component {
       leaveInfoList:{},
     }
     this.refreshCalendar = this.refreshCalendar.bind(this);
+    this.renderLeaveInfo = this.renderLeaveInfo.bind(this);
+    this.holdiayPropPropGetter = this.holdiayPropPropGetter.bind(this);
     this.localizer = momentLocalizer(moment);
   }
 
@@ -145,26 +60,24 @@ class LeaveCalendar extends Component {
 
   refreshCalendar() {
     this.setState({
-      events:eventList,
-      leaveInfoList:{
-        'AL':LeaveUtil.CreateLeaveInfo({
-          used:6,
-          total:16
-        }),
-        'SL':LeaveUtil.CreateLeaveInfo({
-          used:5,
-          total:-1
-        }),
-        'CL':LeaveUtil.CreateLeaveInfo({
-          used:-1,
-          total:-1
-        }),
-        'BL':LeaveUtil.CreateLeaveInfo({
-          used:0,
-          total:1
-        }),
-      },
+      events:EventUtil.StaffEventList,
+      leaveInfoList:LeaveUtil.MyLeaveInfoList,
     });
+  }
+
+  //holdiayPropPropGetter = date => { // so no need bind function call in constructor
+  holdiayPropPropGetter(date) {
+    var isHoliday = false;
+    this.state.events.forEach(function(event) {
+      if(event.leaveType==='FH' && event.start <= date && event.end > date) {
+        isHoliday = true;
+      }
+    });
+    if(isHoliday) {
+      return {style: {backgroundColor : '#f2a7a7'}}
+    } else {
+      return {}
+    }
   }
 
   renderLeaveInfo(key) {
@@ -196,7 +109,7 @@ class LeaveCalendar extends Component {
                   return {style: {backgroundColor : event.bgColor}};
                 }
               }
-              dayPropGetter={holdiayPropPropGetter}
+              dayPropGetter={this.holdiayPropPropGetter}
             />
           </div>
           <div className={classes.leaveTypeArea}>

@@ -1,25 +1,32 @@
 const LeaveSettings = {
-  'AL':{
+  AL:{
     leaveName:'Annual Leave',
     leaveColor:'#3f51b5'
   },
-  'SL':{
+  SL:{
     leaveName:'Sick Leave',
     leaveColor:'#27b0a0'
   },
-  'CL':{
+  CL:{
     leaveName:'Compensation Leave',
     leaveColor:'#f49b21'
   },
-  'BL':{
+  BL:{
     leaveName:'Birthday Leave',
     leaveColor:'#4a974e'
   },
-  'FH':{
+  FH:{
     leaveName:'Holiday',
     leaveColor:'#e44a44'
   },
 };
+
+const LeaveAttribute = {
+  planned:'Planned',
+  used:'Used',
+  remain:'Remaining',
+  total:'Total'
+}
 
 const CreateLeaveInfo = (prop) => {
   return {
@@ -37,4 +44,31 @@ const CreateLeaveInfo = (prop) => {
   }
 }
 
-export default {LeaveSettings, CreateLeaveInfo};
+const MyLeaveInfoList = {
+  AL:CreateLeaveInfo({
+    planned:8,
+    used:6,
+    remain:10,
+    total:16
+  }),
+  SL:CreateLeaveInfo({
+    planned:-1,
+    used:5,
+    remain:-1,
+    total:-1
+  }),
+  CL:CreateLeaveInfo({
+    planned:3,
+    used:1,
+    remain:9,
+    total:10
+  }),
+  BL:CreateLeaveInfo({
+    planned:1,
+    used:0,
+    remain:-1,
+    total:1
+  }),
+}
+
+export default {LeaveSettings, LeaveAttribute, CreateLeaveInfo, MyLeaveInfoList};
