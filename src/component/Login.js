@@ -51,7 +51,8 @@ class LoginPage extends Component {
 
   onSubmit(event) {
     // if(this.state.loginId==='admin') {
-    History.push('/myleave');
+    //History.push('/myleave');
+    History.push('/dashboard');
   }
 
   render() {

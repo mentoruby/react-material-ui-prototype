@@ -12,10 +12,6 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import PeopleIcon from '@material-ui/icons/People';
-import LocalFloristIcon from '@material-ui/icons/LocalFlorist';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
@@ -23,6 +19,7 @@ import InputIcon from '@material-ui/icons/Input';
 import Avatar from '@material-ui/core/Avatar';
 import PersonOutlinedIcon from '@material-ui/icons/PersonOutlined';
 import History from './History';
+import MenuUtil from '../util/MenuUtil';
 
 const drawerWidth = 240;
 const topBarHeight = 81;
@@ -124,33 +121,20 @@ const TopSideBar = props => {
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
-  const menuitems = [
-    {
-      title: 'Dashboard',
-      href: '/dashboard',
-      icon: <DashboardIcon />
-    },
-    {
-      title: 'My Leaves',
-      href: '/myleave',
-      icon: <LocalFloristIcon />
-    },
-    {
-      title: 'Approval',
-      href: '/approval',
-      icon: <PeopleIcon />
-    },
-    {
-      title: 'Settings',
-      href: '/settings',
-      icon: <SettingsIcon />
-    },
-    {
-      title: 'Logout',
-      href: '/logout',
-      icon: <InputIcon />
-    }
-  ];
+  const renderMenuItemButton = (item) => {
+    return (
+      <ListItem className={classes.menuitem} disableGutters key={item.title}>
+        <Button
+          activeClassName={classes.menuactive}
+          className={classes.menubutton}
+          //component={CustomRouterLink}
+          // to={item.href}
+          onClick={() => {History.push(item.href);}}>
+          <div className={classes.menuicon}>{item.icon}</div>{item.title}
+        </Button>
+      </ListItem>
+    )
+  };
 
   return (
     <div className={classes.root}>
@@ -196,22 +180,7 @@ const TopSideBar = props => {
             </div>
             <Divider className={classes.divider} />
             <List>
-              {menuitems.map(item => (
-                <ListItem
-                  className={classes.menuitem}
-                  disableGutters
-                  key={item.title}>
-                  <Button
-                    activeClassName={classes.menuactive}
-                    className={classes.menubutton}
-                    //component={CustomRouterLink}
-                    // to={item.href}
-                    onClick={() => {History.push(item.href);}}>
-                  <div className={classes.menuicon}>{item.icon}</div>
-                    {item.title}
-                  </Button>
-                </ListItem>
-              ))}
+              {MenuUtil.MenuItems.map(item => { return renderMenuItemButton(item); })}
             </List>
             <Divider className={classes.divider} />
           </div>

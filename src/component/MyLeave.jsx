@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import LeaveUtil from '../util/LeaveUtil';
 
 const useStyles = theme => ({
@@ -41,9 +42,11 @@ class MyLeave extends Component {
     const { classes } = this.props;
 
     return (
-      <div>this is MyLeave page</div>
+      <div className={classes.root}>this is MyLeave page
+      
+      </div>
     )
   }
 }
 
-export default MyLeave;
+export default withStyles(useStyles)(MyLeave);
