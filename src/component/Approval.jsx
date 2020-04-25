@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import ApprovalTable from '../component/ApprovalTable';
 
 const useStyles = theme => ({
   root: {
@@ -19,7 +20,9 @@ class Approval extends Component {
     const { classes } = this.props;
 
     return (
-      <div className={classes.root}>this is Approval page</div>
+      <div className={classes.root}>
+        <ApprovalTable/>
+      </div>
     )
   }
 }

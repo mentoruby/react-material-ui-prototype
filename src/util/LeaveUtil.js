@@ -38,7 +38,8 @@ const LeaveUseMode = {
 
 const LeaveStatuses = {
   Approved:'Approved',
-  Pending:'Pending'
+  Pending:'Pending',
+  Rejected:'Rejected',
 };
 
 const CreateLeaveInfo = (prop) => {
@@ -85,73 +86,135 @@ const currYear = new Date().getFullYear();
 const MyLeaveDateList = [
   {
     id: 0,
+    staffName:'Staff 1',
     date: new Date(currYear, 0, 7),
     leaveType: 'AL',
     status: 'Approved',
     remarks: '',
     requestOn: new Date(currYear, 0, 5),
-    approveBy: 'Super Boss',
-    approveOn: new Date(currYear, 0, 8),
+    reviewBy: 'Super Boss',
+    reviewOn: new Date(currYear, 0, 8)
   },
   {
     id: 2,
+    staffName:'Staff 1',
     date: new Date(currYear, 1, 9),
     leaveType: 'CL',
     status: 'Approved',
     remarks: '',
     requestOn: new Date(currYear, 0, 5),
-    approveBy: 'Super Boss',
-    approveOn: new Date(currYear, 0, 8),
+    reviewBy: 'Super Boss',
+    reviewOn: new Date(currYear, 0, 8)
   },
   {
     id: 3,
+    staffName:'Staff 2',
     date: new Date(currYear, 1, 12),
     leaveType: 'AL',
     status: 'Approved',
     remarks: '',
     requestOn: new Date(currYear, 1, 10),
-    approveBy: 'Super Boss',
-    approveOn: new Date(currYear, 1, 10),
+    reviewBy: 'Super Boss',
+    reviewOn: new Date(currYear, 1, 10)
   },
   {
     id: 4,
+    staffName:'Staff 3',
     date: new Date(currYear, 2, 16),
     leaveType: 'SL',
     status: 'Approved',
     remarks: '',
     requestOn: new Date(currYear, 2, 1),
-    approveBy: 'Super Boss',
-    approveOn: new Date(currYear, 2, 2),
+    reviewBy: 'Super Boss',
+    reviewOn: new Date(currYear, 2, 2)
   },
   {
     id: 5,
+    staffName:'Staff 3',
     date: new Date(currYear, 2, 28),
     leaveType: 'BL',
     status: 'Approved',
     remarks: '',
     requestOn: new Date(currYear, 2, 10),
-    approveBy: 'Super Boss',
-    approveOn: new Date(currYear, 2, 28),
+    reviewBy: 'Super Boss',
+    reviewOn: new Date(currYear, 2, 28)
   },
   {
     id: 6,
+    staffName:'Staff 3',
     date: new Date(currYear, 3, 5),
     leaveType: 'CL',
     status: 'Pending',
     remarks: '',
     requestOn: new Date(currYear, 2, 10),
-    approveBy: null,
-    approveOn: null,
+    reviewBy: null,
+    reviewOn: null
   },
   {
     id: 7,
+    staffName:'Staff 4',
     date: new Date(currYear, 3, 6),
     leaveType: 'AL',
     status: 'Pending',
     remarks: '',
     requestOn: new Date(currYear, 0, 5),
-    approveBy: null,
-    approveOn: null,
+    reviewBy: null,
+    reviewOn: null
+  },
+  {
+    id: 8,
+    staffName:'Staff 4',
+    date: new Date(currYear, 2, 22),
+    leaveType: 'AL',
+    status: 'Approved',
+    remarks: '',
+    requestOn: new Date(currYear, 2, 5),
+    reviewBy: 'Super Boss',
+    reviewOn: new Date(currYear, 2, 10)
+  },
+  {
+    id: 9,
+    staffName:'Staff 4',
+    date: new Date(currYear, 3, 9),
+    leaveType: 'AL',
+    status: 'Rejected',
+    remarks: 'From Boss: Team meeting required.',
+    requestOn: new Date(currYear, 3, 3),
+    reviewBy: 'Super Boss',
+    reviewOn: new Date(currYear, 3, 8)
+  },
+  {
+    id: 10,
+    staffName:'Staff 3',
+    date: new Date(currYear, 3, 16),
+    leaveType: 'CL',
+    status: 'Pending',
+    remarks: '',
+    requestOn: new Date(currYear, 3, 3),
+    reviewBy: null,
+    reviewOn: null
+  },
+  {
+    id: 11,
+    staffName:'Staff 5',
+    date: new Date(currYear, 3, 19),
+    leaveType: 'BL',
+    status: 'Pending',
+    remarks: '',
+    requestOn: new Date(currYear, 3, 2),
+    reviewBy: null,
+    reviewOn: null
+  },
+  {
+    id: 12,
+    staffName:'Staff 5',
+    date: new Date(currYear, 3, 9),
+    leaveType: 'AL',
+    status: 'Rejected',
+    remarks: 'From Boss: Team meeting required.',
+    requestOn: new Date(currYear, 3, 2),
+    reviewBy: 'Super Boss',
+    reviewOn: new Date(currYear, 3, 8)
   },
 ];
 

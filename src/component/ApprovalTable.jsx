@@ -19,7 +19,8 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Edit from "@material-ui/icons/Edit";
-import Undo from "@material-ui/icons/Undo";
+import Done from "@material-ui/icons/Done";
+import Close from "@material-ui/icons/Close";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import LeaveUtil from "../util/LeaveUtil";
 import DateFnsUtils from "@date-io/date-fns";
@@ -27,7 +28,6 @@ import moment from "moment";
 
 const useStyles = theme => ({
   root: {
-    marginTop: theme.spacing(2),
   },
   searchItem: {
     margin: theme.spacing(1),
@@ -74,6 +74,7 @@ const useStyles = theme => ({
 
 const headCells = [
   { id: 'action', numeric: false, disablePadding: false, label: 'Action' },
+  { id: 'staffName', numeric: false, disablePadding: false, label: 'Person' },
   { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
   { id: 'leaveType', numeric: false, disablePadding: false, label: 'Leave Type' },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status' }
@@ -147,7 +148,7 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-class LeaveTable extends Component {
+class ApprovalTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -156,10 +157,10 @@ class LeaveTable extends Component {
       searchLeaveType:'',
       searchLeaveStatus:'',
       searchResults:[],
-      order:'asc',
+      order:'desc',
       orderBy:'date',
       page:0,
-      rowsPerPage:5,
+      rowsPerPage:10,
     };
   }
 
@@ -174,10 +175,10 @@ class LeaveTable extends Component {
       searchLeaveType:'',
       searchLeaveStatus:'',
       searchResults:this.renderSearchResult(),
-      order:'asc',
+      order:'desc',
       orderBy:'date',
       page:0,
-      rowsPerPage:5,
+      rowsPerPage:10,
     });
   }
   getNumOfEmptyRows = () => {
@@ -236,10 +237,11 @@ class LeaveTable extends Component {
   renderSearchResult = () => {
     let result = [];
     LeaveUtil.MyLeaveDateList.forEach((element) => {
+      let staffName = element.staffName;
       let date = moment(element.date).format("YYYY-MM-DD");
       let leaveType = LeaveUtil.LeaveSettings[element.leaveType].leaveName;
       let status = element.status;
-      result.push({ date, leaveType, status })
+      result.push({ staffName, date, leaveType, status })
     });
     return result;
   }
@@ -249,6 +251,7 @@ class LeaveTable extends Component {
 
     return (
       <div className={classes.root}>
+        <Typography variant="subtitle1" color="secondary" align="center">You still have leave(s) pending for your approval!</Typography>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Grid container justify="center">
             <KeyboardDatePicker
@@ -306,8 +309,10 @@ class LeaveTable extends Component {
                         <TableRow hover>
                           <TableCell component="th" id={labelId} scope="row">
                             <Tooltip title="Edit"><IconButton color="primary" className={classes.tableIconButton}><Edit className={classes.tableActionButton} /></IconButton></Tooltip>
-                            <Tooltip title="Undo"><IconButton color="secondary" className={classes.tableIconButton}><Undo className={classes.tableActionButton} /></IconButton></Tooltip>
+                            <Tooltip title="Approve"><IconButton color="primary" className={classes.tableIconButton}><Done className={classes.tableActionButton} /></IconButton></Tooltip>
+                            <Tooltip title="Reject"><IconButton color="secondary" className={classes.tableIconButton}><Close className={classes.tableActionButton} /></IconButton></Tooltip>
                           </TableCell>
+                          <TableCell align="left">{row.staffName}</TableCell>
                           <TableCell align="left">{row.date}</TableCell>
                           <TableCell align="left">{row.leaveType}</TableCell>
                           <TableCell align="left">{row.status}</TableCell>
@@ -316,14 +321,14 @@ class LeaveTable extends Component {
                     })}
                   {this.getNumOfEmptyRows() > 0 && (
                     <TableRow style={{ height:33 * this.getNumOfEmptyRows() }}>
-                      <TableCell colSpan={4} />
+                      <TableCell colSpan={5} />
                     </TableRow>
                   )}
                 </TableBody>
               </Table>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[10, 20, 30]}
+              rowsPerPageOptions={[5, 10, 25]}
               component="div"
               count={this.state.searchResults.length}
               rowsPerPage={this.state.rowsPerPage}
@@ -338,4 +343,4 @@ class LeaveTable extends Component {
   }
 }
 
-export default withStyles(useStyles)(LeaveTable);
+export default withStyles(useStyles)(ApprovalTable);
