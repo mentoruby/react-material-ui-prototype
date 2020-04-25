@@ -29,7 +29,7 @@ class LeaveSummary extends Component {
     this.refreshMyLeave = this.refreshMyLeave.bind(this);
     this.renderLeaveSummary = this.renderLeaveSummary.bind(this);
     this.renderLeaveInfoEach = this.renderLeaveInfoEach.bind(this);
-    this.renderLeaveInfoAttr = this.renderLeaveInfoAttr.bind(this);
+    this.renderLeaveUseMode = this.renderLeaveUseMode.bind(this);
     this.doughnutData = this.doughnutData.bind(this);
     this.doughnutOptions = this.doughnutOptions.bind(this);
   }
@@ -44,10 +44,10 @@ class LeaveSummary extends Component {
     });
   }
 
-  renderLeaveInfoAttr(leaveInfo, leaveAttr) {
+  renderLeaveUseMode(leaveInfo, useMode) {
     if(leaveInfo) {
-      if(leaveInfo[leaveAttr] >= 0) {
-        return LeaveUtil.LeaveAttribute[leaveAttr] + ": " + leaveInfo[leaveAttr];
+      if(leaveInfo[useMode] >= 0) {
+        return LeaveUtil.LeaveUseMode[useMode].name + ": " + leaveInfo[useMode];
       } else
       {
         return <div>&nbsp;</div>;
@@ -64,12 +64,12 @@ class LeaveSummary extends Component {
         {
           data: [leaveInfo.remain>0?leaveInfo.remain:0, leaveInfo.used],
           backgroundColor: [
-            LeaveUtil.LeaveUseMode.REMAIN.color,
-            LeaveUtil.LeaveUseMode.USED.color
+            LeaveUtil.LeaveUseMode.remain.color,
+            LeaveUtil.LeaveUseMode.used.color
           ],
         }
       ],
-      labels: [LeaveUtil.LeaveUseMode.REMAIN.name, LeaveUtil.LeaveUseMode.USED.name]
+      labels: [LeaveUtil.LeaveUseMode.remain.name, LeaveUtil.LeaveUseMode.used.name]
     }
   }
 
@@ -88,17 +88,14 @@ class LeaveSummary extends Component {
   renderLeaveInfoEach(leaveInfo) {
     let result = [];
     if(leaveInfo) {
-      if(leaveInfo.planned>=0) {
-        result.push(<Typography variant="h6">{this.renderLeaveInfoAttr(leaveInfo,'planned')}</Typography>)
-      }
       if(leaveInfo.used>=0) {
-        result.push(<Typography variant="h6">{this.renderLeaveInfoAttr(leaveInfo,'used')}</Typography>)
+        result.push(<Typography variant="h6">{this.renderLeaveUseMode(leaveInfo,'used')}</Typography>)
       }
       if(leaveInfo.remain>=0) {
-        result.push(<Typography variant="h6">{this.renderLeaveInfoAttr(leaveInfo,'remain')}</Typography>)
+        result.push(<Typography variant="h6">{this.renderLeaveUseMode(leaveInfo,'remain')}</Typography>)
       }
       if(leaveInfo.total>=0) {
-        result.push(<Typography variant="h6">{this.renderLeaveInfoAttr(leaveInfo,'total')}</Typography>)
+        result.push(<Typography variant="h6">{this.renderLeaveUseMode(leaveInfo,'total')}</Typography>)
       }
     }
     return result

@@ -22,26 +22,24 @@ const LeaveSettings = {
 };
 
 const LeaveUseMode = {
-  USED:{
+  used:{
     name:'Used',
     color:'#E53935' // red
   },
-  REMAIN:{
+  remain:{
     name:'Remaining',
     color:'#3F51B5' // purple
   },
-  TOTAL:{
+  total:{
     name:'Total',
     color:'#1b5e20' // green
   }
 };
 
-const LeaveAttribute = {
-  //planned:'Planned',
-  used:'Used',
-  remain:'Remaining',
-  total:'Total'
-}
+const LeaveStatuses = {
+  Approved:'Approved',
+  Pending:'Pending'
+};
 
 const CreateLeaveInfo = (prop) => {
   return {
@@ -61,25 +59,21 @@ const CreateLeaveInfo = (prop) => {
 
 const MyLeaveInfoList = {
   AL:CreateLeaveInfo({
-    //planned:8,
     used:6,
     remain:10,
     total:16
   }),
   SL:CreateLeaveInfo({
-    //planned:-1,
     used:5,
     remain:-1,
     total:-1
   }),
   CL:CreateLeaveInfo({
-    //planned:3,
     used:1,
     remain:9,
     total:10
   }),
   BL:CreateLeaveInfo({
-    //planned:1,
     used:0,
     remain:1,
     total:1
@@ -161,4 +155,4 @@ const MyLeaveDateList = [
   },
 ];
 
-export default {LeaveSettings, LeaveUseMode, LeaveAttribute, MyLeaveInfoList, MyLeaveDateList};
+export default {LeaveSettings, LeaveUseMode, LeaveStatuses, MyLeaveInfoList, MyLeaveDateList};
