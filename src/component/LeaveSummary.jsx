@@ -20,14 +20,14 @@ const useStyles = theme => ({
   },
 });
 
-class MyLeaveInfoSummary extends Component {
+class LeaveSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
       leaveInfoList: {},
     }
     this.refreshMyLeave = this.refreshMyLeave.bind(this);
-    this.renderLeaveInfoSummary = this.renderLeaveInfoSummary.bind(this);
+    this.renderLeaveSummary = this.renderLeaveSummary.bind(this);
     this.renderLeaveInfoEach = this.renderLeaveInfoEach.bind(this);
     this.renderLeaveInfoAttr = this.renderLeaveInfoAttr.bind(this);
     this.doughnutData = this.doughnutData.bind(this);
@@ -116,7 +116,7 @@ class MyLeaveInfoSummary extends Component {
     }
   }
 
-  renderLeaveInfoSummary(key) {
+  renderLeaveSummary(key) {
     if(key === 'FH') {
       return (null)
     } else {
@@ -147,11 +147,11 @@ class MyLeaveInfoSummary extends Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={4}>
-          {Object.keys(LeaveUtil.LeaveSettings).map(key => { return this.renderLeaveInfoSummary(key); })}
+          {Object.keys(LeaveUtil.LeaveSettings).map(key => { return this.renderLeaveSummary(key); })}
         </Grid>
       </div>
     )
   }
 }
 
-export default withStyles(useStyles)(MyLeaveInfoSummary);
+export default withStyles(useStyles)(LeaveSummary);

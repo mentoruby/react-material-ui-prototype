@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import MyLeaveInfoSummary from '../component/MyLeaveInfoSummary';
-import MyLeaveTable from '../component/MyLeaveTable';
+import LeaveSummary from './LeaveSummary';
+import LeaveTable from '../component/LeaveTable';
 
 const useStyles = theme => ({
   root: {
@@ -16,8 +16,8 @@ class MyLeave extends Component {
 
     return (
       <div className={classes.root}>
-        <MyLeaveInfoSummary />
-        <MyLeaveTable />
+        <LeaveSummary />
+        <LeaveTable />
       </div>
     )
   }

@@ -86,4 +86,79 @@ const MyLeaveInfoList = {
   }),
 }
 
-export default {LeaveSettings, LeaveUseMode, LeaveAttribute, CreateLeaveInfo, MyLeaveInfoList};
+const currYear = new Date().getFullYear();
+
+const MyLeaveDateList = [
+  {
+    id: 0,
+    date: new Date(currYear, 0, 7),
+    leaveType: 'AL',
+    status: 'Approved',
+    remarks: '',
+    requestOn: new Date(currYear, 0, 5),
+    approveBy: 'Super Boss',
+    approveOn: new Date(currYear, 0, 8),
+  },
+  {
+    id: 2,
+    date: new Date(currYear, 1, 9),
+    leaveType: 'CL',
+    status: 'Approved',
+    remarks: '',
+    requestOn: new Date(currYear, 0, 5),
+    approveBy: 'Super Boss',
+    approveOn: new Date(currYear, 0, 8),
+  },
+  {
+    id: 3,
+    date: new Date(currYear, 1, 12),
+    leaveType: 'AL',
+    status: 'Approved',
+    remarks: '',
+    requestOn: new Date(currYear, 1, 10),
+    approveBy: 'Super Boss',
+    approveOn: new Date(currYear, 1, 10),
+  },
+  {
+    id: 4,
+    date: new Date(currYear, 2, 16),
+    leaveType: 'SL',
+    status: 'Approved',
+    remarks: '',
+    requestOn: new Date(currYear, 2, 1),
+    approveBy: 'Super Boss',
+    approveOn: new Date(currYear, 2, 2),
+  },
+  {
+    id: 5,
+    date: new Date(currYear, 2, 28),
+    leaveType: 'BL',
+    status: 'Approved',
+    remarks: '',
+    requestOn: new Date(currYear, 2, 10),
+    approveBy: 'Super Boss',
+    approveOn: new Date(currYear, 2, 28),
+  },
+  {
+    id: 6,
+    date: new Date(currYear, 3, 5),
+    leaveType: 'CL',
+    status: 'Pending',
+    remarks: '',
+    requestOn: new Date(currYear, 2, 10),
+    approveBy: null,
+    approveOn: null,
+  },
+  {
+    id: 7,
+    date: new Date(currYear, 3, 6),
+    leaveType: 'AL',
+    status: 'Pending',
+    remarks: '',
+    requestOn: new Date(currYear, 0, 5),
+    approveBy: null,
+    approveOn: null,
+  },
+];
+
+export default {LeaveSettings, LeaveUseMode, LeaveAttribute, MyLeaveInfoList, MyLeaveDateList};
