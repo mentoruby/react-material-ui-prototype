@@ -83,7 +83,7 @@ class LeaveCalendar extends Component {
   renderLeaveInfo(key) {
     const { classes } = this.props;
     return (
-      <div className={classes.leaveTypeEach}>
+      <div className={classes.leaveTypeEach} key={'LeaveCalendar-LeaveInfo-'+key}>
         <Avatar className={classes.avatar} style={{ backgroundColor:LeaveUtil.LeaveSettings[key].leaveColor }} >{key}</Avatar>
         <Typography variant="caption">{LeaveUtil.LeaveSettings[key].leaveName}</Typography>
         <Typography variant="caption">{this.state.leaveInfoList[key]? this.state.leaveInfoList[key].fraction:""}</Typography>
