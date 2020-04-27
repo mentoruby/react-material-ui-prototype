@@ -18,6 +18,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import Search from "@material-ui/icons/Search";
 import Edit from "@material-ui/icons/Edit";
 import Undo from "@material-ui/icons/Undo";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
@@ -156,7 +157,7 @@ class LeaveTable extends Component {
       searchLeaveType:'',
       searchLeaveStatus:'',
       searchResults:[],
-      order:'asc',
+      order:'desc',
       orderBy:'date',
       page:0,
       rowsPerPage:5,
@@ -174,7 +175,7 @@ class LeaveTable extends Component {
       searchLeaveType:'',
       searchLeaveStatus:'',
       searchResults:this.renderSearchResult(),
-      order:'asc',
+      order:'desc',
       orderBy:'date',
       page:0,
       rowsPerPage:5,
@@ -219,7 +220,7 @@ class LeaveTable extends Component {
     let result = [];
     for(let key in LeaveUtil.LeaveSettings) {
       if(key!=='FH') {
-        result.push(<MenuItem value={key}><Typography variant="body2">{LeaveUtil.LeaveSettings[key].leaveName}</Typography></MenuItem>);
+        result.push(<MenuItem key={'LeaveTable-searchLeaveType-select-key-'+key} value={key}><Typography variant="body2">{LeaveUtil.LeaveSettings[key].leaveName}</Typography></MenuItem>);
       }
     }
     return result
@@ -228,7 +229,7 @@ class LeaveTable extends Component {
   renderLeaveStatusMenuItem = () => {
     let result = [];
     for(let key in LeaveUtil.LeaveStatuses) {
-      result.push(<MenuItem value={key}><Typography variant="body2">{LeaveUtil.LeaveStatuses[key]}</Typography></MenuItem>);
+      result.push(<MenuItem key={'LeaveTable-searchLeaveStatus-select-key-'+key} value={key}><Typography variant="body2">{LeaveUtil.LeaveStatuses[key]}</Typography></MenuItem>);
     }
     return result
   }
@@ -236,11 +237,32 @@ class LeaveTable extends Component {
   renderSearchResult = () => {
     let result = [];
     LeaveUtil.MyLeaveDateList.forEach((element) => {
-      let date = moment(element.date).format("YYYY-MM-DD");
+      let date = moment(element.date).format('YYYY-MM-DD');
       let leaveType = LeaveUtil.LeaveSettings[element.leaveType].leaveName;
       let status = element.status;
       result.push({ date, leaveType, status })
     });
+    return result;
+  }
+
+  renderActionButtons = (row,actionKeyPrefix) => {
+    const { classes } = this.props;
+    let result = [];
+    let isApproved = (row.status === LeaveUtil.LeaveStatuses.Approved);
+    let date = moment(row.date, 'YYYY-MM-DD');
+    let today = new Date(new Date().getFullYear(), 3, 10);
+
+    if(isApproved) {
+      if(moment(date).isBefore(today,'day')) {
+        result.push(<Tooltip key={actionKeyPrefix+'view'} title="View"><IconButton color="primary" className={classes.tableIconButton}><Search className={classes.tableActionButton} /></IconButton></Tooltip>);
+      } else {
+        result.push(<Tooltip key={actionKeyPrefix+'edit'} title="Edit"><IconButton color="primary" className={classes.tableIconButton}><Edit className={classes.tableActionButton} /></IconButton></Tooltip>);
+        result.push(<Tooltip key={actionKeyPrefix+'undo'} title="Undo"><IconButton color="secondary" className={classes.tableIconButton}><Undo className={classes.tableActionButton} /></IconButton></Tooltip>);
+      }
+    } else {
+      result.push(<Tooltip key={actionKeyPrefix+'edit'} title="Edit"><IconButton color="primary" className={classes.tableIconButton}><Edit className={classes.tableActionButton} /></IconButton></Tooltip>);
+      result.push(<Tooltip key={actionKeyPrefix+'undo'} title="Undo"><IconButton color="secondary" className={classes.tableIconButton}><Undo className={classes.tableActionButton} /></IconButton></Tooltip>);
+    }
     return result;
   }
 
@@ -274,16 +296,16 @@ class LeaveTable extends Component {
               KeyboardButtonProps={{'aria-label': 'change date'}}
             />
             <Grid item className={classes.searchItem}>
-              <InputLabel shrink filled>Leave Type</InputLabel>
-              <Select filled selectMenu id="searchLeaveType" displayEmpty className={classes.selectLeaveType} onChange={this.handleChangeSearchLeaveType}>
-                <MenuItem value=""><Typography variant="body2">&nbsp;</Typography></MenuItem>
+              <InputLabel shrink>Leave Type</InputLabel>
+              <Select id="searchLeaveType" displayEmpty className={classes.selectLeaveType} onChange={this.handleChangeSearchLeaveType} value={this.state.searchLeaveType}>
+                <MenuItem value=''><Typography variant="body2">&nbsp;</Typography></MenuItem>
                 {this.renderLeaveTypeMenuItem()}
               </Select>
             </Grid>
             <Grid item className={classes.searchItem}>
-              <InputLabel shrink filled>Leave Status</InputLabel>
-              <Select filled selectMenu id="searchLeaveStatus" displayEmpty className={classes.selectLeaveStatus} onChange={this.handleChangeSearchLeaveStatus}>
-                <MenuItem value=""><Typography variant="body2">&nbsp;</Typography></MenuItem>
+              <InputLabel shrink>Leave Status</InputLabel>
+              <Select id="searchLeaveStatus" displayEmpty className={classes.selectLeaveStatus} onChange={this.handleChangeSearchLeaveStatus} value={this.state.searchLeaveStatus}>
+                <MenuItem value=''><Typography variant="body2">&nbsp;</Typography></MenuItem>
                 {this.renderLeaveStatusMenuItem()}
               </Select>
             </Grid>
@@ -301,12 +323,13 @@ class LeaveTable extends Component {
                   {stableSort(this.state.searchResults, getComparator(this.state.order, this.state.orderBy))
                     .slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
                     .map((row, index) => {
-                      const labelId = `enhanced-table-action-${index}`;
+                      const labelId = `LeaveTable-enhanced-table-action-${index}`;
+                      const rowkey = `LeaveTable-enhanced-table-row-${index}`;
+                      const actionKeyPrefix = `LeaveTable-enhanced-table-action-${index}-`;
                       return (
-                        <TableRow hover>
+                        <TableRow hover key={rowkey}>
                           <TableCell component="th" id={labelId} scope="row">
-                            <Tooltip title="Edit"><IconButton color="primary" className={classes.tableIconButton}><Edit className={classes.tableActionButton} /></IconButton></Tooltip>
-                            <Tooltip title="Undo"><IconButton color="secondary" className={classes.tableIconButton}><Undo className={classes.tableActionButton} /></IconButton></Tooltip>
+                            {this.renderActionButtons(row,actionKeyPrefix)}
                           </TableCell>
                           <TableCell align="left">{row.date}</TableCell>
                           <TableCell align="left">{row.leaveType}</TableCell>
@@ -323,7 +346,7 @@ class LeaveTable extends Component {
               </Table>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[10, 20, 30]}
+              rowsPerPageOptions={[5, 10, 25]}
               component="div"
               count={this.state.searchResults.length}
               rowsPerPage={this.state.rowsPerPage}
