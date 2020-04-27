@@ -18,6 +18,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import Search from "@material-ui/icons/Search";
 import Edit from "@material-ui/icons/Edit";
 import Done from "@material-ui/icons/Done";
 import Close from "@material-ui/icons/Close";
@@ -220,7 +221,7 @@ class ApprovalTable extends Component {
     let result = [];
     for(let key in LeaveUtil.LeaveSettings) {
       if(key!=='FH') {
-        result.push(<MenuItem value={key}><Typography variant="body2">{LeaveUtil.LeaveSettings[key].leaveName}</Typography></MenuItem>);
+        result.push(<MenuItem key={'ApprovalTable-searchLeaveType-select-key-'+key} value={key}><Typography variant="body2">{LeaveUtil.LeaveSettings[key].leaveName}</Typography></MenuItem>);
       }
     }
     return result
@@ -229,7 +230,7 @@ class ApprovalTable extends Component {
   renderLeaveStatusMenuItem = () => {
     let result = [];
     for(let key in LeaveUtil.LeaveStatuses) {
-      result.push(<MenuItem value={key}><Typography variant="body2">{LeaveUtil.LeaveStatuses[key]}</Typography></MenuItem>);
+      result.push(<MenuItem key={'ApprovalTable-searchLeaveStatus-select-key-'+key} value={key}><Typography variant="body2">{LeaveUtil.LeaveStatuses[key]}</Typography></MenuItem>);
     }
     return result
   }
@@ -243,6 +244,30 @@ class ApprovalTable extends Component {
       let status = element.status;
       result.push({ staffName, date, leaveType, status })
     });
+    return result;
+  }
+
+  renderActionButtons = (row,actionKeyPrefix) => {
+    const { classes } = this.props;
+    let result = [];
+    let isApproved = (row.status === LeaveUtil.LeaveStatuses.Approved);
+    let isRejected = (row.status === LeaveUtil.LeaveStatuses.Rejected);
+    let date = moment(row.date, 'YYYY-MM-DD');
+    let today = new Date(new Date().getFullYear(), 3, 1);
+
+    if(isApproved || isRejected) {
+      if(moment(date).isBefore(today,'day')) {
+        result.push(<Tooltip key={actionKeyPrefix+'view'} title="View"><IconButton color="primary" className={classes.tableIconButton}><Search className={classes.tableActionButton} /></IconButton></Tooltip>);
+      } else {
+        result.push(<Tooltip key={actionKeyPrefix+'edit'} title="Edit"><IconButton color="primary" className={classes.tableIconButton}><Edit className={classes.tableActionButton} /></IconButton></Tooltip>);
+        result.push(<Tooltip key={actionKeyPrefix+'approve'} title="Approve"><IconButton color="primary" className={classes.tableIconButton}><Done className={classes.tableActionButton} /></IconButton></Tooltip>);
+        result.push(<Tooltip key={actionKeyPrefix+'reject'} title="Reject"><IconButton color="secondary" className={classes.tableIconButton}><Close className={classes.tableActionButton} /></IconButton></Tooltip>);
+      }
+    } else {
+      result.push(<Tooltip key={actionKeyPrefix+'edit'} title="Edit"><IconButton color="primary" className={classes.tableIconButton}><Edit className={classes.tableActionButton} /></IconButton></Tooltip>);
+      result.push(<Tooltip key={actionKeyPrefix+'approve'} title="Approve"><IconButton color="primary" className={classes.tableIconButton}><Done className={classes.tableActionButton} /></IconButton></Tooltip>);
+      result.push(<Tooltip key={actionKeyPrefix+'reject'} title="Reject"><IconButton color="secondary" className={classes.tableIconButton}><Close className={classes.tableActionButton} /></IconButton></Tooltip>);
+    }
     return result;
   }
 
@@ -277,16 +302,16 @@ class ApprovalTable extends Component {
               KeyboardButtonProps={{'aria-label': 'change date'}}
             />
             <Grid item className={classes.searchItem}>
-              <InputLabel shrink filled>Leave Type</InputLabel>
-              <Select filled selectMenu id="searchLeaveType" displayEmpty className={classes.selectLeaveType} onChange={this.handleChangeSearchLeaveType}>
-                <MenuItem value=""><Typography variant="body2">&nbsp;</Typography></MenuItem>
+              <InputLabel shrink>Leave Type</InputLabel>
+              <Select id="searchLeaveType" displayEmpty className={classes.selectLeaveType} onChange={this.handleChangeSearchLeaveType} value={this.state.searchLeaveType}>
+                <MenuItem value=''><Typography variant="body2">&nbsp;</Typography></MenuItem>
                 {this.renderLeaveTypeMenuItem()}
               </Select>
             </Grid>
             <Grid item className={classes.searchItem}>
-              <InputLabel shrink filled>Leave Status</InputLabel>
-              <Select filled selectMenu id="searchLeaveStatus" displayEmpty className={classes.selectLeaveStatus} onChange={this.handleChangeSearchLeaveStatus}>
-                <MenuItem value=""><Typography variant="body2">&nbsp;</Typography></MenuItem>
+              <InputLabel shrink>Leave Status</InputLabel>
+              <Select id="searchLeaveStatus" displayEmpty className={classes.selectLeaveStatus} onChange={this.handleChangeSearchLeaveStatus} value={this.state.searchLeaveStatus}>
+                <MenuItem value=''><Typography variant="body2">&nbsp;</Typography></MenuItem>
                 {this.renderLeaveStatusMenuItem()}
               </Select>
             </Grid>
@@ -304,13 +329,13 @@ class ApprovalTable extends Component {
                   {stableSort(this.state.searchResults, getComparator(this.state.order, this.state.orderBy))
                     .slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
                     .map((row, index) => {
-                      const labelId = `enhanced-table-action-${index}`;
+                      const labelId = `ApprovalTable-enhanced-table-action-${index}`;
+                      const rowkey = `ApprovalTable-enhanced-table-row-${index}`;
+                      const actionKeyPrefix = `ApprovalTable-enhanced-table-action-${index}-`;
                       return (
-                        <TableRow hover>
+                        <TableRow hover key={rowkey}>
                           <TableCell component="th" id={labelId} scope="row">
-                            <Tooltip title="Edit"><IconButton color="primary" className={classes.tableIconButton}><Edit className={classes.tableActionButton} /></IconButton></Tooltip>
-                            <Tooltip title="Approve"><IconButton color="primary" className={classes.tableIconButton}><Done className={classes.tableActionButton} /></IconButton></Tooltip>
-                            <Tooltip title="Reject"><IconButton color="secondary" className={classes.tableIconButton}><Close className={classes.tableActionButton} /></IconButton></Tooltip>
+                            {this.renderActionButtons(row,actionKeyPrefix)}
                           </TableCell>
                           <TableCell align="left">{row.staffName}</TableCell>
                           <TableCell align="left">{row.date}</TableCell>
