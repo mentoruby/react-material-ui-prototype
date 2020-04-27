@@ -123,7 +123,7 @@ class LeaveSummary extends Component {
             <CardContent>
               <Grid container justify="space-between">
                 <Grid item>
-                  <Typography color="textPrimary" gutterBottom variant="body2">{LeaveUtil.LeaveSettings[key].leaveName}</Typography>
+                  <Typography color="primary" gutterBottom variant="body2">{LeaveUtil.LeaveSettings[key].leaveName}</Typography>
                   {this.renderLeaveInfoEach(this.state.leaveInfoList[key],key)}
                 </Grid>
                 <Grid item>

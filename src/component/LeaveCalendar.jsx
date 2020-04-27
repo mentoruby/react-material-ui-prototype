@@ -4,10 +4,9 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 import LeaveUtil from '../util/LeaveUtil';
 import EventUtil from '../util/EventUtil';
+import LeaveUsedSummary from './LeaveUsedSummary';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -48,9 +47,6 @@ class LeaveCalendar extends Component {
       events:[],
       leaveInfoList:{},
     }
-    this.refreshCalendar = this.refreshCalendar.bind(this);
-    this.renderLeaveInfo = this.renderLeaveInfo.bind(this);
-    this.holdiayPropPropGetter = this.holdiayPropPropGetter.bind(this);
     this.localizer = momentLocalizer(moment);
   }
 
@@ -58,15 +54,15 @@ class LeaveCalendar extends Component {
       this.refreshCalendar();
   }
 
-  refreshCalendar() {
+  refreshCalendar = () => {
     this.setState({
       events:EventUtil.StaffEventList,
       leaveInfoList:LeaveUtil.MyLeaveInfoList,
     });
   }
 
-  //holdiayPropPropGetter = date => { // so no need bind function call in constructor
-  holdiayPropPropGetter(date) {
+  // holdiayPropPropGetter(date) { // this syntax requires bind method in constructor: this.holdiayPropPropGetter = this.holdiayPropPropGetter.bind(this);
+  holdiayPropPropGetter = date => {
     var isHoliday = false;
     this.state.events.forEach(function(event) {
       if(event.leaveType==='FH' && event.start <= date && event.end > date) {
@@ -78,17 +74,6 @@ class LeaveCalendar extends Component {
     } else {
       return {}
     }
-  }
-
-  renderLeaveInfo(key) {
-    const { classes } = this.props;
-    return (
-      <div className={classes.leaveTypeEach} key={'LeaveCalendar-LeaveInfo-'+key}>
-        <Avatar className={classes.avatar} style={{ backgroundColor:LeaveUtil.LeaveSettings[key].leaveColor }} >{key}</Avatar>
-        <Typography variant="caption">{LeaveUtil.LeaveSettings[key].leaveName}</Typography>
-        <Typography variant="caption">{this.state.leaveInfoList[key]? this.state.leaveInfoList[key].fraction:""}</Typography>
-      </div>
-    )
   }
 
   render() {
@@ -113,7 +98,7 @@ class LeaveCalendar extends Component {
             />
           </div>
           <div className={classes.leaveTypeArea}>
-            {Object.keys(LeaveUtil.LeaveSettings).map(key => { return this.renderLeaveInfo(key); })}
+            <LeaveUsedSummary includeHoliday={true}/>
           </div>
         </CardContent>
       </Card>

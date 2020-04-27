@@ -10,27 +10,36 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import TextField from '@material-ui/core/TextField';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
 import LeaveUtil from '../util/LeaveUtil';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import moment from 'moment';
+import DateFnsUtils from '@date-io/date-fns';
+import FileUpload from './FileUpload';
+import LeaveUsedSummary from './LeaveUsedSummary';
+import History from './History';
 
 const useStyles = theme => ({
-  root: {},
-  formControlItem: {
-    marginBottom: theme.spacing(1),
+  root: {
+    width: '100%',
+  },
+  label: {
+    fontSize: '12px',
+  },
+  gutterBottom: {
+    marginBottom: theme.spacing(3),
   },
   datePickerInput: {
-    marginRight: theme.spacing(1),
+    minwidth: 150,
+    marginRight: theme.spacing(0.5),
   },
   inputNumOfDays: {
-    height:'35px',
+    height:'50px',
     width:'130px',
   },
-  inputRemark: {
-    width: '650px',
+  submit: {
+    margin: theme.spacing(1),
   },
 });
 
@@ -46,7 +55,19 @@ class LeaveForm extends Component {
       uploadFilePath:null,
       leaveRemark:'',
       reviewBy:null,
-      reviewOn:null
+      reviewOn:null,
+      files:[
+        {
+          name: 'File1.pdf',
+          type: 'application/pdf',
+          size: 100000,
+        },
+        {
+          name: 'File2.jpg',
+          type: 'application/x-jpg',
+          size: 200000,
+        }
+      ]
     };
   }
 
@@ -66,6 +87,18 @@ class LeaveForm extends Component {
         leaveRemark:'',
         reviewBy:'Big Boss',
         reviewOn:new Date(new Date().getFullYear(), 3, 3),
+        files:[
+          {
+            name: 'File1.pdf',
+            type: 'application/pdf',
+            size: 100000,
+          },
+          {
+            name: 'File2.jpg',
+            type: 'application/x-jpg',
+            size: 200000,
+          }
+        ]
       });
     }
   }
@@ -104,7 +137,7 @@ class LeaveForm extends Component {
     let result = [];
     for(let key in LeaveUtil.LeaveSettings) {
       if(key!=='FH') {
-        result.push(<FormControlLabel key={'LeaveForm-leaveType-radio-key-'+key} value={key} control={<Radio />} label={LeaveUtil.LeaveSettings[key].leaveName} />);
+        result.push(<FormControlLabel key={'LeaveForm-leaveType-radio-key-'+key} value={key} control={<Radio />} label={LeaveUtil.LeaveSettings[key].leaveName}/>);
       }
     }
     return result;
@@ -118,85 +151,108 @@ class LeaveForm extends Component {
     const { classes } = this.props;
 
     return (
-      <form autoComplete="off" noValidate onSubmit={this.onSubmit}>
-        <Card>
-          {this.renderCardHeader()}
-          <Divider />
-          <CardContent>
-            <Grid container direction="row" spacing={3}>
-              <Grid item xs={12}>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend" required>Leave Type</FormLabel>
-                  <RadioGroup name="leaveType" value={this.state.leaveType} onChange={this.handleChangeLeaveType} row>
-                    {this.renderLeaveTypeRadio()}
-                  </RadioGroup>
-                </FormControl>
+      <div className={classes.root}>
+        <form onSubmit={this.onSubmit}>
+          <Card>
+            {this.renderCardHeader()}
+            <Divider />
+            <LeaveUsedSummary includeHoliday={false}/>
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <FormControl component="fieldset">
+                  <FormLabel component="legend" required className={classes.label}>Leave Type</FormLabel>
+                    <RadioGroup name="leaveType" value={this.state.leaveType} onChange={this.handleChangeLeaveType} row>
+                      {this.renderLeaveTypeRadio()}
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container direction="row" spacing={3}>
-              <Grid item xs={12}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <FormControl component="fieldset" className={classes.formControlItem}>
-                    <FormLabel component="legend" required>Date From</FormLabel>
-                    <KeyboardDatePicker
-                      id="leaveDateFrom"
-                      required
-                      disableToolbar
-                      className={classes.datePickerInput}
-                      variant="inline"
-                      format="yyyy-MM-dd"
-                      value={this.state.leaveDateFrom}
-                      onChange={this.handleChangeLeaveDateFrom}
-                      KeyboardButtonProps={{'aria-label': 'change date'}}
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Grid container justify="space-between">
+                <Grid item>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <FormControl component="fieldset" className={classes.gutterBottom}>
+                      <KeyboardDatePicker
+                        id="leaveDateFrom"
+                        label="Date From"
+                        required
+                        disableToolbar
+                        className={classes.datePickerInput}
+                        variant="inline"
+                        format="yyyy-MM-dd"
+                        value={this.state.leaveDateFrom}
+                        onChange={this.handleChangeLeaveDateFrom}
+                        //InputLabelProps={{style: {fontSize: 40}}}
+                        KeyboardButtonProps={{'aria-label': 'change date'}}
+                      />
+                    </FormControl>
+                    <FormControl component="fieldset" className={classes.gutterBottom}>
+                      <KeyboardDatePicker
+                        id="leaveDateTo"
+                        label="Date To"
+                        required
+                        disableToolbar
+                        className={classes.datePickerInput}
+                        variant="inline"
+                        format="yyyy-MM-dd"
+                        value={this.state.leaveDateTo}
+                        onChange={this.handleChangeLeaveDateTo}
+                        KeyboardButtonProps={{'aria-label': 'change date'}}
+                      />
+                    </FormControl>
+                  </MuiPickersUtilsProvider>
+                  <FormControl component="fieldset">
+                    <TextField
+                      id="numOfDays"
+                      label="Number of Days"
+                      variant="outlined"
+                      onChange={this.handleChangeNumOfDays}
+                      value={this.state.numOfDays}
+                      InputProps={{readOnly: true, className: classes.inputNumOfDays}}
                     />
                   </FormControl>
-                  <FormControl component="fieldset" className={classes.formControlItem}>
-                    <FormLabel component="legend" required>Date To</FormLabel>
-                    <KeyboardDatePicker
-                      id="leaveDateTo"
-                      required
-                      disableToolbar
-                      className={classes.datePickerInput}
-                      variant="inline"
-                      format="yyyy-MM-dd"
-                      value={this.state.leaveDateTo}
-                      onChange={this.handleChangeLeaveDateTo}
-                      KeyboardButtonProps={{'aria-label': 'change date'}}
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <FileUpload viewOnly={false} uploadedFiles={this.state.files}/>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <FormControl component="fieldset" fullWidth>
+                    <TextField
+                      id="leaveRemark"
+                      label="Remarks (if any)"
+                      fullWidth
+                      multiline
+                      rows={4}
+                      variant="outlined"
+                      onChange={this.handleChangeLeaveRemark}
+                      value={this.state.leaveRemark}
                     />
                   </FormControl>
-                </MuiPickersUtilsProvider>
-                <FormControl component="fieldset" className={classes.formControlItem}>
-                  <FormLabel component="legend" required>Number of Days</FormLabel>
-                  <TextField
-                    id="numOfDays"
-                    name="numOfDays"
-                    required
-                    variant="outlined"
-                    onChange={this.handleChangeNumOfDays}
-                    value={this.state.numOfDays}
-                    InputProps={{readOnly: true, className: classes.inputNumOfDays}}
-                  />
-                </FormControl>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container direction="row" spacing={3}>
-              <Grid item xs={12}>
-                <FormControl component="fieldset" className={classes.formControlItem}>
-                  <FormLabel component="legend">Remarks</FormLabel>
-                  <TextareaAutosize
-                    id="leaveRemark"
-                    name="leaveRemark"
-                    rowsMin={3}
-                    className={classes.inputRemark}
-                    onChange={this.handleChangeLeaveRemark}
-                    value={this.state.leaveRemark}
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </form>
+            </CardContent>
+            <CardActions>
+              <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}>
+                  Save
+                </Button>
+            </CardActions>
+          </Card>
+        </form>
+      </div>
     )
   }
 }
