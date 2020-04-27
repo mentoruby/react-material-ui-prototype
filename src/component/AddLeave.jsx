@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import ApprovalTable from '../component/ApprovalTable';
+import LeaveForm from '../component/LeaveForm';
 
 const useStyles = theme => ({
   root: {
@@ -9,7 +9,7 @@ const useStyles = theme => ({
   },
 });
 
-class Approval extends Component {
+class AddLeave extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -20,10 +20,10 @@ class Approval extends Component {
 
     return (
       <div className={classes.root}>
-        <ApprovalTable/>
+        <LeaveForm useMode={'new'}/>
       </div>
     )
   }
 }
 
-export default withStyles(useStyles)(Approval);
+export default withStyles(useStyles)(AddLeave);

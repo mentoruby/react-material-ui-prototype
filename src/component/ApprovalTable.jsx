@@ -70,6 +70,10 @@ const useStyles = theme => ({
     width: "20px",
     height: "20px",
     padding: "0px"
+  },
+  displayNone: {
+    margin: theme.spacing(1),
+    [theme.breakpoints.down('lg')]: {display: 'none'},
   }
 });
 
@@ -271,6 +275,16 @@ class ApprovalTable extends Component {
     return result;
   }
 
+  // TODO hidden export button in mobile
+  renderExportButton = () => {
+    const { classes } = this.props;
+    return (
+      <Grid item className={classes.searchItem}>
+        <Button type="submit" variant="contained" color="primary">Export</Button>
+      </Grid>
+    )
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -318,6 +332,7 @@ class ApprovalTable extends Component {
             <Grid item className={classes.searchItem}>
               <Button type="submit" variant="contained" color="primary">Search</Button>
             </Grid>
+            {this.renderExportButton()}
           </Grid>
         </MuiPickersUtilsProvider>
         <div className={classes.root}>

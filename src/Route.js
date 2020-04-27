@@ -7,7 +7,7 @@ import MenuUtil from './util/MenuUtil';
 class Routes extends Component {
   renderMenuItemRoute(item) {
     return (
-        <Route path={item.href} exact component={item.component} />
+        <Route key={item.name} path={item.href} exact component={item.component} />
     )
   }
 

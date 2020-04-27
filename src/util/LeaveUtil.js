@@ -153,7 +153,7 @@ const MyLeaveDateList = [
   {
     id: 7,
     staffName:'Staff 4',
-    date: new Date(currYear, 3, 6),
+    date: new Date(currYear, 0, 6),
     leaveType: 'AL',
     status: 'Pending',
     remarks: '',
@@ -197,11 +197,11 @@ const MyLeaveDateList = [
   {
     id: 11,
     staffName:'Staff 5',
-    date: new Date(currYear, 3, 19),
+    date: new Date(currYear, 2, 19),
     leaveType: 'BL',
     status: 'Pending',
     remarks: '',
-    requestOn: new Date(currYear, 3, 2),
+    requestOn: new Date(currYear, 2, 2),
     reviewBy: null,
     reviewOn: null
   },

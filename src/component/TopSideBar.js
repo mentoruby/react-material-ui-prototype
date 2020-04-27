@@ -91,13 +91,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginRight: theme.spacing(1)
   },
-  menuactive: {
-    color: theme.palette.primary.main,
-    fontWeight: theme.typography.fontWeightMedium,
-    '& $icon': {
-      color: theme.palette.primary.main
-    }
-  }
 }));
 
 const TopSideBar = props => {
@@ -122,18 +115,21 @@ const TopSideBar = props => {
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
   const renderMenuItemButton = (item) => {
-    return (
-      <ListItem className={classes.menuitem} disableGutters key={item.title}>
-        <Button
-          activeClassName={classes.menuactive}
-          className={classes.menubutton}
-          //component={CustomRouterLink}
-          // to={item.href}
-          onClick={() => {History.push(item.href);}}>
-          <div className={classes.menuicon}>{item.icon}</div>{item.title}
-        </Button>
-      </ListItem>
-    )
+    if(item.visible) {
+      return (
+        <ListItem className={classes.menuitem} disableGutters key={item.title}>
+          <Button
+            className={classes.menubutton}
+            //component={CustomRouterLink}
+            // to={item.href}
+            onClick={() => {History.push(item.href);}}>
+            <div className={classes.menuicon}>{item.icon}</div>{item.title}
+          </Button>
+        </ListItem>
+      )
+    } else {
+      return (null)
+    }
   };
 
   return (

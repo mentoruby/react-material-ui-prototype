@@ -4,6 +4,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import LeaveSummary from './LeaveSummary';
 import LeaveTable from '../component/LeaveTable';
+import History from './History';
 
 const useStyles = theme => ({
   root: {
@@ -22,7 +23,7 @@ class MyLeave extends Component {
     return (
       <div className={classes.root}>
         <Box pb={2}>
-          <Button variant="contained" color="primary">Add Leave</Button>
+          <Button variant="contained" color="primary" onClick={() => {History.push('/addLeave');}}>Add Leave</Button>
         </Box>
         <LeaveSummary />
         <LeaveTable />
