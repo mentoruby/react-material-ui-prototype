@@ -85,17 +85,17 @@ class LeaveSummary extends Component {
     }
   }
 
-  renderLeaveInfoEach(leaveInfo) {
+  renderLeaveInfoEach(leaveInfo,leaveType) {
     let result = [];
     if(leaveInfo) {
       if(leaveInfo.used>=0) {
-        result.push(<Typography variant="h6">{this.renderLeaveUseMode(leaveInfo,'used')}</Typography>)
+        result.push(<Typography key={'LeaveSummary-LeaveInfo-'+leaveType+'-used'} variant="h6">{this.renderLeaveUseMode(leaveInfo,'used')}</Typography>)
       }
       if(leaveInfo.remain>=0) {
-        result.push(<Typography variant="h6">{this.renderLeaveUseMode(leaveInfo,'remain')}</Typography>)
+        result.push(<Typography key={'LeaveSummary-LeaveInfo-'+leaveType+'-remain'} variant="h6">{this.renderLeaveUseMode(leaveInfo,'remain')}</Typography>)
       }
       if(leaveInfo.total>=0) {
-        result.push(<Typography variant="h6">{this.renderLeaveUseMode(leaveInfo,'total')}</Typography>)
+        result.push(<Typography key={'LeaveSummary-LeaveInfo-'+leaveType+'-total'} variant="h6">{this.renderLeaveUseMode(leaveInfo,'total')}</Typography>)
       }
     }
     return result
@@ -118,17 +118,16 @@ class LeaveSummary extends Component {
       return (null)
     } else {
       return (
-        <Grid item lg={3} sm={6} xl={3} xs={12}>
+        <Grid item lg={3} sm={6} xl={3} xs={12} key={'LeaveSummary-Grid-'+key}>
           <Card>
             <CardContent>
               <Grid container justify="space-between">
                 <Grid item>
                   <Typography color="textPrimary" gutterBottom variant="body2">{LeaveUtil.LeaveSettings[key].leaveName}</Typography>
-                  {this.renderLeaveInfoEach(this.state.leaveInfoList[key])}
+                  {this.renderLeaveInfoEach(this.state.leaveInfoList[key],key)}
                 </Grid>
                 <Grid item>
-                  {/* <Avatar className={classes.avatar} style={{ backgroundColor:LeaveUtil.LeaveSettings[key].leaveColor }} >{key}</Avatar> */}
-                  {this.renderLeaveDoughnutEach(this.state.leaveInfoList[key])}
+                  {this.renderLeaveDoughnutEach(this.state.leaveInfoList[key],key)}
                 </Grid>
               </Grid>
             </CardContent>
