@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,8 +38,8 @@ const PublicTopBar = () => {
             Company Name
           </Typography>
           <div className={classes.flexGrow} />
-          <IconButton color="inherit" onClick={() => {alert('Going to Sign Up page');}} alt="Sign Up">
-            <PersonAddOutlinedIcon />
+          <IconButton color="primary" onClick={() => {alert('Going to Sign Up page');}} alt="Sign Up">
+            <PersonAddIcon />
           </IconButton>
         </Toolbar>
       </AppBar>

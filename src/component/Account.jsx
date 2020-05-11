@@ -24,6 +24,9 @@ class Account extends Component {
       password: null,
       firstName: null,
       lastName: null,
+      nickName: null,
+      jobTitle: null,
+      department: null,
       email: null,
       phone: null,
       birthMonth: 1,
@@ -42,6 +45,9 @@ class Account extends Component {
       password: null,
       firstName: 'Super',
       lastName: 'Man',
+      nickName: 'Super Man',
+      jobTitle: 'Deputy CEO',
+      department: 'Management Board',
       email: 'superman@company.com',
       phone: '12345678',
       birthMonth: 10,
@@ -61,6 +67,18 @@ class Account extends Component {
 
   handleChangeLastName = (event) => {
     this.setState({lastName: event.target.value});
+  }
+
+  handleChangNickName = (event) => {
+    this.setState({nickName: event.target.value});
+  }
+
+  handleChangeJobTitle = (event) => {
+    this.setState({jobTitle: event.target.value});
+  }
+
+  handleChangeDepartment = (event) => {
+    this.setState({department: event.target.value});
   }
 
   handleChangeEmail = (event) => {
@@ -121,6 +139,15 @@ class Account extends Component {
                     </Grid>
                     <Grid item md={6} xs={12}>
                       <TextField fullWidth label="Last Name" margin="dense" name="lastName" onChange={this.handleChangeLastName} required value={this.state.lastName} variant="outlined" />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField fullWidth label="Nick Name" margin="dense" name="nickName" onChange={this.handleChangNickName} required value={this.state.nickName} variant="outlined" />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField fullWidth label="Title" margin="dense" name="jobTitle" onChange={this.handleChangeJobTitle} required value={this.state.jobTitle} variant="outlined" />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField fullWidth label="Department" margin="dense" name="department" onChange={this.handleChangeDepartment} required value={this.state.department} variant="outlined" />
                     </Grid>
                     <Grid item md={6} xs={12}>
                       <TextField fullWidth label="Email" margin="dense" name="email" onChange={this.handleChangeEmail} required value={this.state.email} variant="outlined"/>

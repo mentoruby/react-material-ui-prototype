@@ -18,11 +18,13 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Search from "@material-ui/icons/Search";
 import Edit from "@material-ui/icons/Edit";
 import Done from "@material-ui/icons/Done";
 import Close from "@material-ui/icons/Close";
 import StaffList from '../util/StaffList';
+import History from './History';
 
 const useStyles = theme => ({
   root: {
@@ -32,15 +34,12 @@ const useStyles = theme => ({
   searchItem: {
     margin: theme.spacing(1),
   },
+  dropDownItem: {
+    minWidth: 200,
+  },
   datePickerInput: {
     width: 150,
     margin: theme.spacing(1),
-  },
-  selectLeaveType: {
-    minWidth: 160,
-  },
-  selectLeaveStatus: {
-    minWidth: 100,
   },
   paperResult: {
     width: '100%',
@@ -80,7 +79,7 @@ const headCells = [
   { id: 'action', numeric: false, disablePadding: false, label: 'Action' },
   { id: 'staffName', numeric: false, disablePadding: false, label: 'Name' },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
-  { id: 'birthday', numeric: false, disablePadding: false, label: 'Birthday (dd/mm)' },
+  { id: 'department', numeric: false, disablePadding: false, label: 'Department' },
   { id: 'annualLeave', numeric: false, disablePadding: false, label: 'AL' },
   { id: 'annualLeaveLeft', numeric: false, disablePadding: false, label: 'AL Left' },
   { id: 'compLeave', numeric: false, disablePadding: false, label: 'CL' },
@@ -160,6 +159,9 @@ class Setting extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      searchDepartment: null,
+      searchJobTitle: null,
+      searchStatus: null,
       searchResults:[],
       order:'asc',
       orderBy:'staffName',
@@ -174,6 +176,9 @@ class Setting extends Component {
 
   refreshSetting = () => {
     this.setState({
+      searchDepartment: null,
+      searchJobTitle: null,
+      searchStatus: 'all',
       searchResults:this.renderSearchResult(),
       order:'asc',
       orderBy:'staffName',
@@ -192,6 +197,18 @@ class Setting extends Component {
     this.setState({orderBy:property});
   };
 
+  handleChangeSearchDept = (event) => {
+    this.setState({searchDepartment: event.target.value});
+  }
+
+  handleChangeSearchJobTitle = (event) => {
+    this.setState({searchJobTitle: event.target.value});
+  }
+
+  handleChangeSearchStatus = (event) => {
+    this.setState({searchStatus: event.target.value});
+  }
+
   handleChangePage = (event, newPage) => {
     this.setState({page:newPage});
   };
@@ -201,23 +218,56 @@ class Setting extends Component {
     this.setState({page:0});
   };
 
+  renderDepartmentMenuItem = () => {
+    let result = [];
+    result.push(<MenuItem key={'StaffList-searchDepartment-select-key-1'} value="Management Board"><Typography variant="body2">Management Board</Typography></MenuItem>);
+    result.push(<MenuItem key={'StaffList-searchDepartment-select-key-2'} value="Human Resource"><Typography variant="body2">Human Resource</Typography></MenuItem>);
+    result.push(<MenuItem key={'StaffList-searchDepartment-select-key-3'} value="Information Technology"><Typography variant="body2">Information Technology</Typography></MenuItem>);
+    return result
+  }
+
+  renderJobTitleMenuItem = () => {
+    let result = [];
+    result.push(<MenuItem key={'StaffList-searchJobTitle-select-key-1'} value="Deputy CEO"><Typography variant="body2">Deputy CEO</Typography></MenuItem>);
+    result.push(<MenuItem key={'StaffList-searchJobTitle-select-key-2'} value="Supervisor"><Typography variant="body2">Supervisor</Typography></MenuItem>);
+    result.push(<MenuItem key={'StaffList-searchJobTitle-select-key-3'} value="Associate"><Typography variant="body2">Associate</Typography></MenuItem>);
+    return result
+  }
+
+  renderStatusMenuItem = () => {
+    let result = [];
+    result.push(<MenuItem key={'StaffList-searchStatus-select-key-3'} value="all"><Typography variant="body2">All</Typography></MenuItem>);
+    result.push(<MenuItem key={'StaffList-searchStatus-select-key-1'} value="active"><Typography variant="body2">Active Only</Typography></MenuItem>);
+    result.push(<MenuItem key={'StaffList-searchStatus-select-key-2'} value="inactive"><Typography variant="body2">Inactive Only</Typography></MenuItem>);
+    return result
+  }
+
   renderSearchResult = () => {
     let result = [];
     StaffList.StaffList.forEach((element) => {
       let staffName = element.firstName+' '+element.lastName;
       let status = element.status;
-      let birthday = element.birthDay+'/'+element.birthMonth;
+      let department = element.department;
       let annualLeave = element.annualLeave;
       let annualLeaveLeft = element.annualLeaveLeft;
       let compLeave = element.compLeave;
       let compLeaveLeft = element.compLeaveLeft;
       let sickLeaveUsed = element.sickLeaveUsed;
-      result.push({ staffName, status, birthday, annualLeave, annualLeaveLeft, compLeave, compLeaveLeft, sickLeaveUsed })
+      result.push({ staffName, status, department, annualLeave, annualLeaveLeft, compLeave, compLeaveLeft, sickLeaveUsed })
     });
     return result;
   }
 
   renderActionButtons = (row,actionKeyPrefix) => {
+    const { classes } = this.props;
+    let result = [];
+    let isActive = (row.status === 'Active');
+    if(isActive) {
+      result.push(<Tooltip key={actionKeyPrefix+'edit'} title="Edit"><IconButton color="primary" className={classes.tableIconButton}><Edit className={classes.tableActionButton} /></IconButton></Tooltip>);
+    } else {
+      result.push(<Tooltip key={actionKeyPrefix+'view'} title="View"><IconButton color="primary" className={classes.tableIconButton}><Search className={classes.tableActionButton} /></IconButton></Tooltip>);
+    }
+    return result;
   }
 
   render() {
@@ -225,53 +275,82 @@ class Setting extends Component {
 
     return (
       <div className={classes.root}>
-        <div className={classes.root}>
-          <Paper className={classes.paperResult}>
-            <TableContainer>
-              <Table className={classes.tableResult} aria-labelledby="tableTitle" size='small' aria-label="enhanced table">
-                <EnhancedTableHead classes={classes} order={this.state.order} orderBy={this.state.orderBy} onRequestSort={this.handleRequestSort} />
-                <TableBody>
-                  {stableSort(this.state.searchResults, getComparator(this.state.order, this.state.orderBy))
-                    .slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
-                    .map((row, index) => {
-                      const labelId = `StaffList-enhanced-table-action-${index}`;
-                      const rowkey = `StaffList-enhanced-table-row-${index}`;
-                      const actionKeyPrefix = `StaffList-enhanced-table-action-${index}-`;
-                      return (
-                        <TableRow hover key={rowkey}>
-                          <TableCell component="th" id={labelId} scope="row">
-                            {this.renderActionButtons(row,actionKeyPrefix)}
-                          </TableCell>
-                          <TableCell align="left">{row.staffName}</TableCell>
-                          <TableCell align="left">{row.status}</TableCell>
-                          <TableCell align="left">{row.birthday}</TableCell>
-                          <TableCell align="left">{row.annualLeave}</TableCell>
-                          <TableCell align="left">{row.annualLeaveLeft}</TableCell>
-                          <TableCell align="left">{row.compLeave}</TableCell>
-                          <TableCell align="left">{row.compLeaveLeft}</TableCell>
-                          <TableCell align="left">{row.sickLeaveUsed}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {this.getNumOfEmptyRows() > 0 && (
-                    <TableRow style={{ height:33 * this.getNumOfEmptyRows() }}>
-                      <TableCell colSpan={5} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={this.state.searchResults.length}
-              rowsPerPage={this.state.rowsPerPage}
-              page={this.state.page}
-              onChangePage={this.handleChangePage}
-              onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            />
-          </Paper>
-        </div>
+        <IconButton color="primary" onClick={() => {History.push('/account');}} alt="Add Account">
+          <PersonAddIcon />
+        </IconButton>
+        <Grid container justify="center">
+          <Grid item className={classes.searchItem}>
+            <InputLabel shrink>Department</InputLabel>
+            <Select id="searchDepartment" displayEmpty className={classes.dropDownItem} onChange={this.handleChangeSearchDept} value={this.state.searchDepartment}>
+              <MenuItem value=''><Typography variant="body2">&nbsp;</Typography></MenuItem>
+              {this.renderDepartmentMenuItem()}
+            </Select>
+          </Grid>
+          <Grid item className={classes.searchItem}>
+            <InputLabel shrink>Title</InputLabel>
+            <Select id="searchJobTitle" displayEmpty className={classes.dropDownItem} onChange={this.handleChangeSearchJobTitle} value={this.state.searchJobTitle}>
+              <MenuItem value=''><Typography variant="body2">&nbsp;</Typography></MenuItem>
+              {this.renderJobTitleMenuItem()}
+            </Select>
+          </Grid>
+          <Grid item className={classes.searchItem}>
+            <InputLabel shrink>Status</InputLabel>
+            <Select id="searchStatus" displayEmpty className={classes.dropDownItem} onChange={this.handleChangeSearchStatus} value={this.state.searchStatus}>
+              {this.renderStatusMenuItem()}
+            </Select>
+          </Grid>
+          <Grid item className={classes.searchItem}>
+            <Button type="submit" variant="contained" color="primary">Search</Button>
+          </Grid>
+          <Grid item className={classes.searchItem}>
+            <Button type="submit" variant="contained" color="primary">Export</Button>
+          </Grid>
+        </Grid>
+        <Paper className={classes.paperResult}>
+          <TableContainer>
+            <Table className={classes.tableResult} aria-labelledby="tableTitle" size='small' aria-label="enhanced table">
+              <EnhancedTableHead classes={classes} order={this.state.order} orderBy={this.state.orderBy} onRequestSort={this.handleRequestSort} />
+              <TableBody>
+                {stableSort(this.state.searchResults, getComparator(this.state.order, this.state.orderBy))
+                  .slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage)
+                  .map((row, index) => {
+                    const labelId = `StaffList-enhanced-table-action-${index}`;
+                    const rowkey = `StaffList-enhanced-table-row-${index}`;
+                    const actionKeyPrefix = `StaffList-enhanced-table-action-${index}-`;
+                    return (
+                      <TableRow hover key={rowkey}>
+                        <TableCell component="th" id={labelId} scope="row">
+                          {this.renderActionButtons(row,actionKeyPrefix)}
+                        </TableCell>
+                        <TableCell align="left">{row.staffName}</TableCell>
+                        <TableCell align="left">{row.status}</TableCell>
+                        <TableCell align="left">{row.department}</TableCell>
+                        <TableCell align="left">{row.annualLeave}</TableCell>
+                        <TableCell align="left">{row.annualLeaveLeft}</TableCell>
+                        <TableCell align="left">{row.compLeave}</TableCell>
+                        <TableCell align="left">{row.compLeaveLeft}</TableCell>
+                        <TableCell align="left">{row.sickLeaveUsed}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {this.getNumOfEmptyRows() > 0 && (
+                  <TableRow style={{ height:33 * this.getNumOfEmptyRows() }}>
+                    <TableCell colSpan={9} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={this.state.searchResults.length}
+            rowsPerPage={this.state.rowsPerPage}
+            page={this.state.page}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
+        </Paper>
       </div>
     )
   }
