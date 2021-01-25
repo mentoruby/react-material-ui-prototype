@@ -1,68 +1,30 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# e-Leave UI Prototype
 
-## Available Scripts
+This project is a preliminary web interface made by React and Node.js with Materialized Design.
 
-In the project directory, you can run:
+# Motivation
+Its objective is to allow company staff to apply or cancel any types of leave applications. Admin and staff can review or update records at any times thourgh PC or mobile.
 
-### `npm start`
-
-Runs the app in the development mode.<br />
+# Install & Start
+At first, you need to run
+```
+npm install
+```
+Then you can start it up by
+```
+npm start
+```
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<br />
+The page will reload if you make edits. You will also see any lint errors in the console.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+# Sceenshots
+![Login](./public/samples/login.jpeg)
+![Main](./public/samples/main.jpeg)
+![Dashboard](./public/samples/dashboard.jpeg)
+![Account](./public/samples/account.jpeg)
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+# Reference websites
+* https://material-ui.com/
+* https://jquense.github.io/react-big-calendar/examples/index.html
+* https://www.chartjs.org/
